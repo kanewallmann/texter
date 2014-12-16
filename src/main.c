@@ -188,7 +188,7 @@ static void inbox_received_callback(DictionaryIterator* iterator, void* context)
 		t = dict_find( iterator, 2 );	strcpy( message, t->value->cstring );
 		
 		// Display the message sent window for some time
-		show_message_sent_window( address, message );
+		show_message_sent_window( person, message );
 	}
 }
 

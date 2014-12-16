@@ -58,16 +58,17 @@ void message_sent_timer( void* data )
 	hide_message_sent_window();	
 }
 
-void show_message_sent_window( const char* address, const char* message ) {
+void show_message_sent_window( const char* person, const char* message ) {
   initialise_ui();
   window_set_window_handlers(s_window, (WindowHandlers) {
     .unload = handle_window_unload,
   });
 	
-	APP_LOG(APP_LOG_LEVEL_INFO, "Showing message sent window %s %s", address, message );
-		
-	text_layer_set_text( text_address, address );	
+	APP_LOG(APP_LOG_LEVEL_INFO, "Showing message sent window %s %s", person, message );
+			
+	text_layer_set_text( text_address, person );	
 	text_layer_set_text( text_message, message );	
+	
 	layer_mark_dirty( window_get_root_layer( s_window ) );
 	
   window_stack_push(s_window, true);
