@@ -4,10 +4,17 @@
         ""
     ],
     "companyName": "kane@wallmann.ws",
-    "longName": "Texter",
+    "longName": "Texter - Quick SMS Reply",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/sms.png",
+                "menuIcon": true,
+                "name": "ICON",
+                "type": "png"
+            }
+        ]
     },
     "shortName": "Texter",
     "uuid": "7bac54b7-2359-4754-8947-8290444b45cd",

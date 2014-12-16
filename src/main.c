@@ -1,6 +1,5 @@
 #include <pebble.h>
 #include "loading_window.h"
-#include "menu_window.h"
 #include "select_window.h"
 #include "message_sent_window.h"
 #include "constants.h"
@@ -201,9 +200,7 @@ static void inbox_dropped_callback(AppMessageResult reason, void *context)
 void handle_init(void)
 {
 	APP_LOG(APP_LOG_LEVEL_INFO, "Handling init" );
-		
-	menu_window_init();
-	
+			
 	// Register for messages from phone app
 	app_message_register_inbox_received( inbox_received_callback );
 	app_message_register_inbox_dropped( inbox_dropped_callback );
