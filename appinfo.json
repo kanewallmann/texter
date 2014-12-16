@@ -1,0 +1,19 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "kane@wallmann.ws",
+    "longName": "Texter",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "shortName": "Texter",
+    "uuid": "7bac54b7-2359-4754-8947-8290444b45cd",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
