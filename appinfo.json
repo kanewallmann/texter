@@ -9,6 +9,11 @@
     "resources": {
         "media": [
             {
+                "file": "images/background.png",
+                "name": "IMAGE_SELECT_BG",
+                "type": "png"
+            },
+            {
                 "file": "images/sms.png",
                 "menuIcon": true,
                 "name": "ICON",
@@ -19,7 +24,7 @@
     "shortName": "Texter",
     "uuid": "7bac54b7-2359-4754-8947-8290444b45cd",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.4",
     "watchapp": {
         "watchface": false
     }

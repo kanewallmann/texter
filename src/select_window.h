@@ -14,7 +14,7 @@ typedef void(*SelectHandler)( SelectItem* item, unsigned short index );
 typedef struct
 {
 	Window* window;
-	
+		
 	SelectHandler handler;
 		
 	SelectItem item_up;
@@ -32,6 +32,11 @@ typedef struct
 	TextLayer* text_item_long_up;
 	TextLayer* text_item_long_select;
 	TextLayer* text_item_long_down;
+	
+	BitmapLayer* drawing_layer;
+	
+	char status[32];
+	TextLayer* text_status;
 }
 SelectWindow;
 	

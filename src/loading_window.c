@@ -8,11 +8,11 @@ static TextLayer *s_textlayer_1;
 static void initialise_ui(void) {
   s_window = window_create();
   window_set_background_color(s_window, GColorBlack);
-  window_set_fullscreen(s_window, false);
+  window_set_fullscreen(s_window, true);
   
   // s_textlayer_1
-  s_textlayer_1 = text_layer_create(GRect(0, 61, 144, 15));
-  text_layer_set_background_color(s_textlayer_1, GColorBlack);
+  s_textlayer_1 = text_layer_create(GRect(0, 70, 144, 20));
+  text_layer_set_background_color(s_textlayer_1, GColorClear);
   text_layer_set_text_color(s_textlayer_1, GColorWhite);
   text_layer_set_text(s_textlayer_1, "Loading...");
   text_layer_set_text_alignment(s_textlayer_1, GTextAlignmentCenter);
