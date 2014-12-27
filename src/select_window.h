@@ -42,3 +42,4 @@ SelectWindow;
 	
 SelectWindow* select_window_create( );
 void select_window_refresh( SelectWindow* );
+void select_window_destroy( SelectWindow* window );

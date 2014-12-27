@@ -15,9 +15,21 @@ bool combine_messages = false;
 // Options
 bool combine_messages;
 
+// Synchronised send
+bool waiting_on_ack = false;
+
 const char send_message[] = "Send Message";
 const char combine_message[] = "Combine Message";
 const char exit_message[] = "Exit Texter";
+
+void sync_send()
+{
+	while( waiting_on_ack )
+		psleep( 100 );
+	
+	waiting_on_ack = true;
+	app_message_outbox_send();
+}
 
 void home_select_handler( SelectItem* item, unsigned short index )
 {	
@@ -32,7 +44,7 @@ void home_select_handler( SelectItem* item, unsigned short index )
 			DictionaryIterator *iter;
 			app_message_outbox_begin(&iter);
 			dict_write_uint8( iter, 0, ACTION_SELECT_CONTACT );
-			app_message_outbox_send();
+			sync_send();
 			
 			show_loading_window();
 		}
@@ -41,7 +53,7 @@ void home_select_handler( SelectItem* item, unsigned short index )
 			DictionaryIterator *iter;
 			app_message_outbox_begin(&iter);
 			dict_write_uint8( iter, 0, ACTION_RECENT );
-			app_message_outbox_send();
+			sync_send();
 			
 			show_loading_window();
 		}
@@ -50,7 +62,7 @@ void home_select_handler( SelectItem* item, unsigned short index )
 			DictionaryIterator *iter;
 			app_message_outbox_begin(&iter);
 			dict_write_uint8( iter, 0, ACTION_RECENT_CALLS );
-			app_message_outbox_send();
+			sync_send();
 
 			show_loading_window();
 		}
@@ -59,7 +71,7 @@ void home_select_handler( SelectItem* item, unsigned short index )
 			DictionaryIterator *iter;
 			app_message_outbox_begin(&iter);
 			dict_write_uint8( iter, 0, ACTION_FAVOURITE );
-			app_message_outbox_send();
+			sync_send();
 			
 			person[0] = 0;
 			
@@ -80,7 +92,7 @@ void contact_select_handler( SelectItem* item, unsigned short index )
 		DictionaryIterator *iter;
 		app_message_outbox_begin(&iter);
 		dict_write_uint8( iter, 0, ACTION_SELECT_CONTACT );
-		app_message_outbox_send();
+		sync_send();
 	
 		show_loading_window();
 }
@@ -95,7 +107,7 @@ void combine_select_handler( SelectItem* item, unsigned short index )
 			dict_write_uint8( iter, 0, ACTION_NAVIGATE );
 			dict_write_cstring( iter, 1, path );
 			dict_write_cstring( iter, 2, address );
-			app_message_outbox_send();	
+			sync_send();	
 				
 			window_stack_pop( true );
 			show_loading_window();
@@ -163,7 +175,7 @@ void navigate_select_handler( SelectItem* item, unsigned short index )
 			app_message_outbox_begin(&iter);
 			dict_write_uint8( iter, 0, ACTION_NAVIGATE );
 			dict_write_cstring( iter, 1, path );
-			app_message_outbox_send();	
+			sync_send();	
 			
 			show_loading_window();
 		}
@@ -186,7 +198,7 @@ void navigate_select_handler( SelectItem* item, unsigned short index )
 					app_message_outbox_begin(&iter);
 					dict_write_uint8( iter, 0, ACTION_COMBINE );
 					dict_write_cstring( iter, 1, path );
-					app_message_outbox_send();	
+					sync_send();	
 			}
 			else
 			{
@@ -195,7 +207,7 @@ void navigate_select_handler( SelectItem* item, unsigned short index )
 					dict_write_uint8( iter, 0, ACTION_NAVIGATE );
 					dict_write_cstring( iter, 1, path );
 					dict_write_cstring( iter, 2, address );
-					app_message_outbox_send();	
+					sync_send();	
 				
 					show_loading_window();
 			}
@@ -353,18 +365,27 @@ static void inbox_received_callback(DictionaryIterator* iterator, void* context)
 	}
 }
 
-static void inbox_dropped_callback(AppMessageResult reason, void *context)
+static void outbox_sent_callback(DictionaryIterator* iterator, void* context)
 {
-		APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
+	waiting_on_ack = false;
+}
+
+static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context)
+{
+	waiting_on_ack = false;
 }
 
 void handle_init(void)
 {
 	APP_LOG(APP_LOG_LEVEL_INFO, "Handling init" );
 			
+	// We need interactive speeds here
+	app_comm_set_sniff_interval( SNIFF_INTERVAL_REDUCED ); 
+	
 	// Register for messages from phone app
 	app_message_register_inbox_received( inbox_received_callback );
-	app_message_register_inbox_dropped( inbox_dropped_callback );
+	app_message_register_outbox_sent( outbox_sent_callback );
+	app_message_register_outbox_failed( outbox_failed_callback );
 	app_message_open( app_message_inbox_size_maximum(), app_message_outbox_size_maximum() );
 	
 	APP_LOG(APP_LOG_LEVEL_INFO, "AppMessage callback registered" );
@@ -380,7 +401,7 @@ void handle_init(void)
 	dict_write_uint8( iter, 1, VERSION_MAJOR );
 	dict_write_uint8( iter, 2, VERSION_MINOR );
 	
-  app_message_outbox_send();
+  sync_send();
 }
 
 int main(void)

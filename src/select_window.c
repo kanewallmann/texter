@@ -106,10 +106,8 @@ void select_window_refresh( SelectWindow* mw )
 	text_layer_set_text( mw->text_status, mw->status );
 }
 
-static void handle_window_unload(Window* window)
+void select_window_destroy( SelectWindow* mw )
 {	
-  SelectWindow* mw = (SelectWindow*)window_get_user_data( window );
-	
 	text_layer_destroy( mw->text_item_up );
 	text_layer_destroy( mw->text_item_select );
 	text_layer_destroy( mw->text_item_down );
@@ -119,7 +117,7 @@ static void handle_window_unload(Window* window)
 	
 	bitmap_layer_destroy( mw->drawing_layer );
 	
-	window_destroy( window );
+	window_destroy( mw->window );
 	
 	free( mw );
 	
@@ -128,13 +126,19 @@ static void handle_window_unload(Window* window)
 		current_path--;
 		*current_path = 0;
 	}
-	
-	mw = NULL;
+}
+
+static void handle_window_unload(Window* window)
+{	
+  SelectWindow* mw = (SelectWindow*)window_get_user_data( window );
+	select_window_destroy( mw );
 }
 
 SelectWindow* select_window_create()
 {
 	SelectWindow* mw = malloc( sizeof( SelectWindow ) );
+	
+	memset( mw, 0, sizeof( SelectWindow ) );
 	
 	// Create the window
 	mw->window = window_create();

@@ -24,7 +24,7 @@
     "shortName": "Texter",
     "uuid": "7bac54b7-2359-4754-8947-8290444b45cd",
     "versionCode": 1,
-    "versionLabel": "1.4",
+    "versionLabel": "1.5",
     "watchapp": {
         "watchface": false
     }

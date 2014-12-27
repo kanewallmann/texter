@@ -19,7 +19,7 @@
 #define ACTION_COMBINE 6
 	
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 4
+#define VERSION_MINOR 5
 
 // Comment out for debug
 #undef APP_LOG
@@ -28,6 +28,6 @@
 char path[24];
 char* current_path;
 
-char address[12];
+char address[24];
 char person[24];
 char message[64];
